@@ -14,7 +14,7 @@ const drawScatterPlot = (data) => {
   const xScale = d3.scaleLinear()
                    .domain([xMin-1, xMax+1])
                    .range([0, graphWidth])
-  const [yMin, yMax] = d3.extent(data, d => d.Date)
+  const [yMin, yMax] = d3.extent(data, d => new Date(d.Date))
   const yScale = d3.scaleLinear()
                    .domain([yMin, yMax])
                    .range([0, graphHeight])
@@ -30,6 +30,7 @@ const drawScatterPlot = (data) => {
   const xAxis = d3.axisBottom()
                   .scale(xScale)
                   .tickValues(xTickValues.filter(d => d % 2 === 0))
+                  .tickFormat(d => d)
 
   const yTickValues = (() => {
     let values = []
@@ -61,7 +62,7 @@ const drawScatterPlot = (data) => {
                     .attr('data-yValue', d => d.Date)
                     .attr('r', circleRadius)
                     .attr('stroke', '#000000')
-                    .attr('stoke-width', 2)
+                    .attr('stroke-width', 1)
                     .attr('fill', d => d.Doping ? colorScale('doping') : colorScale('no-doping'))
                     .on('mouseover', function(e, d) {
                       tooltip
