@@ -84,13 +84,19 @@ const drawScatterPlot = (data) => {
                           ${d.Doping}
                         `: ``}
                       `)
-                      .style('left', `${e.clientX}px`)
-                      .style('top', `${e.clientY}px)`)
+                      .style('left', `${e.clientX + circleRadius}px`)
+                      .style('top', () => {
+                        const { height } = tooltip.node().getBoundingClientRect()
+                        return `${e.clientY - height/2}px`
+                      })
                       .style('opacity', '0.9')
 
+                      d3.select(this).style('cursor', 'pointer')
                     })
                     .on('mouseout', function() {
                       tooltip.style('opacity', 0)
+                             .style('left', 0)
+                             .style('top', 0)
                     })
 
   svg.append('g')
