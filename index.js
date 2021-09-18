@@ -61,13 +61,14 @@ const drawScatterPlot = (data) => {
   const tooltip = d3.select('#tooltip')
 
   const graph = svg.append('g')
-                    .selectAll('circle')
+                    .selectAll('circle.dot')
                     .data(data)
                     .join('circle')
+                    .classed('dot', true)
                     .attr('cx', d => xScale(+d.Year))
                     .attr('cy', d => yScale(d.Date))
-                    .attr('data-xValue', d => d.Year)
-                    .attr('data-yValue', d => d.Date)
+                    .attr('data-xvalue', d => d.Year)
+                    .attr('data-yvalue', d => d.Date)
                     .attr('r', circleRadius)
                     .attr('stroke', '#000000')
                     .attr('stroke-width', 1)
@@ -89,6 +90,7 @@ const drawScatterPlot = (data) => {
                         const { height } = tooltip.node().getBoundingClientRect()
                         return `${e.clientY - height/2}px`
                       })
+                      .attr('data-year', d.Year)
                       .style('opacity', '0.9')
 
                       d3.select(this).style('cursor', 'pointer')
@@ -128,6 +130,7 @@ const drawScatterPlot = (data) => {
                     .data(filters)
                     .join('g')
                     .classed('legend', true)
+                    .attr('id', 'legend')
                     .attr('transform', (_, i) => `translate(${graphWidth + paddingLeft}, ${graphHeight/2 + i*20})`)
   const legendText = legend.append('text')
         .text(d => legendScale(d))
