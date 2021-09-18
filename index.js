@@ -49,10 +49,15 @@ const drawScatterPlot = (data) => {
                   .tickValues(yTickValues.sort(d => -d))
                   .tickFormat(d3.timeFormat('%M:%S'));
 
+  const filters = ['no-doping', 'doping']
+  const colors = ['#ff7f0e', '#1f77b4']
+  const legends = ['No doping allegations', 'Riders with doping allegations']
   const colorScale = d3.scaleOrdinal()
-                       .domain(['doping', 'no-doping'])
-                       .range(['#1f77b4', '#ff7f0e'])
-
+                       .domain(filters)
+                       .range(colors)
+  const legendScale = d3.scaleOrdinal()
+                       .domain(filters)
+                       .range(legends)
   const tooltip = d3.select('#tooltip')
 
   const graph = svg.append('g')
@@ -111,6 +116,26 @@ const drawScatterPlot = (data) => {
      .attr('transform', `translate(${graphWidth/2 + paddingLeft}, ${paddingTop/2 - 5})`)
      .attr('text-anchor', 'middle')
      .style('font-size', '1.2rem')
+
+
+  const legend = svg.selectAll('g.legend')
+                    .data(filters)
+                    .join('g')
+                    .classed('legend', true)
+                    .attr('transform', (_, i) => `translate(${graphWidth + paddingLeft}, ${graphHeight/2 + i*20})`)
+  const legendText = legend.append('text')
+        .text(d => legendScale(d))
+        .style('font-size', '0.8rem')
+        .attr('text-anchor', 'end')
+        .attr('dy', 'center')
+  legend.append('rect')
+        .attr('width', 16)
+        .attr('height', 16)
+        .attr('fill', d => colorScale(d))
+        .attr('transform', () => {
+          const { height } = legendText.node().getBBox()
+          return `translate(5, ${-height})`
+        })
 
 }
 
