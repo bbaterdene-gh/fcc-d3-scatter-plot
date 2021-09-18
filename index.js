@@ -34,16 +34,19 @@ const drawScatterPlot = (data) => {
 
   const yTickValues = (() => {
     let values = []
-    yMin.setSeconds(0)
-    for(i = yMin; i <= yMax; i.setSeconds(i.getSeconds() + 15)) {
-      values = [...values, new Date(i)]
+
+    for(i = yMin; i <= yMax; i.setSeconds(i.getSeconds() + 1)) {
+      const date = new Date(i)
+      if (date.getSeconds() % 15 === 0) {
+        values = [...values, date]
+      }
     }
     return values
   })()
 
   const yAxis = d3.axisLeft()
                   .scale(yScale)
-                  .tickValues(yTickValues.filter(d => d.getSeconds() % 15 === 0).sort(d => -d))
+                  .tickValues(yTickValues.sort(d => -d))
                   .tickFormat(d3.timeFormat('%M:%S'));
 
   const colorScale = d3.scaleOrdinal()
